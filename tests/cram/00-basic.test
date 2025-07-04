@@ -1,0 +1,9 @@
+# Lines starting with # are comments
+
+# Lines starting with $ are commands
+$ echo "Hello World!"
+
+# Absent any special redirections any free text following the command is the
+# expected output (blank lines are removed)
+
+Hello World!
