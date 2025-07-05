@@ -42,6 +42,7 @@ macro_rules! cram {
                 env!(concat!("CARGO_BIN_EXE_", $exe)),
                 $test_dir,
                 env!("CARGO_TARGET_TMPDIR"),
+                false,
             )
         }
     };
@@ -52,6 +53,7 @@ pub fn cram_internal(
     exe: &str,
     test_dir: impl AsRef<Path>,
     tmp_dir: impl AsRef<Path>,
+    no_output: bool,
 ) -> Result<()> {
     let Context {
         exe,
@@ -60,7 +62,7 @@ pub fn cram_internal(
     } = Context::new(exe, test_dir, tmp_dir)?;
 
     walk::walk(&test_dir, |path| {
-        if path.extension() == Some("err") {
+        if path.extension() != Some("test") {
             return Ok(());
         }
         let stripped_path = path.strip_prefix(&test_dir)?;
@@ -75,7 +77,11 @@ pub fn cram_internal(
         Ok(())
     })?;
 
-    let cram_status = Command::new("cram").arg(&tmp_dir).status()?;
+    let cram_status = if no_output {
+        Command::new("cram").arg(&tmp_dir).output()?.status
+    } else {
+        Command::new("cram").arg(&tmp_dir).status()?
+    };
 
     walk::walk(&tmp_dir, |path| {
         if path.extension() != Some("err") {

@@ -7,3 +7,6 @@ edition = "2024"
 anyhow = { version = "1.0.98", features = ["backtrace"] }
 camino = "1.1.10"
 pratt = { version = "0.1.0", path = "../pratt" }
+
+[dev-dependencies]
+pretty_assertions = "1.4.1"
