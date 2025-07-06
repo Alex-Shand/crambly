@@ -1,0 +1,65 @@
+use std::str::FromStr;
+
+use anyhow::Result;
+use camino::Utf8Path as Path;
+
+use super::magic;
+use crate::{
+    test::{Test, tc::TestCase},
+    utils,
+};
+
+pub(crate) fn read(path: &Path) -> Result<Test> {
+    let str = utils::read_file(path)?;
+    let mut lines = str.lines().filter(|s| !s.is_empty()).peekable();
+    let lines = &mut lines;
+    next_eq(lines, magic::HEADER);
+    let path = next_prefix(lines, magic::PATH_PREFIX);
+    let mut cases = Vec::new();
+    while lines.peek().is_some() {
+        cases.push(read_case(lines));
+    }
+    Ok(Test { path, cases })
+}
+
+fn read_case<'a>(lines: &mut impl Iterator<Item = &'a str>) -> TestCase {
+    let name = next_prefix(lines, magic::NAME_PREFIX);
+    let command = next_prefix(lines, magic::COMMAND_PREFIX);
+    let output = lines
+        .take_while(|&l| l != magic::METADATA_HEADER)
+        .map(|l| l.strip_prefix(magic::OUTPUT_PREFIX).unwrap())
+        .collect::<Vec<_>>()
+        .join("\n");
+    let output_start_line =
+        next_prefix(lines, magic::METADATA_OUTPUT_START_PREFIX);
+    let output_end_line = next_prefix(lines, magic::METADATA_OUTPUT_END_PREFIX);
+    next_eq(lines, format!("{}{name}", magic::END_TEST_CASE));
+    TestCase {
+        name,
+        command,
+        output,
+        output_start_line,
+        output_end_line,
+    }
+}
+
+fn next_eq<'a>(
+    lines: &mut impl Iterator<Item = &'a str>,
+    expected: impl AsRef<str>,
+) {
+    assert_eq!(lines.next(), Some(expected.as_ref()));
+}
+
+fn next_prefix<'a, R: FromStr>(
+    lines: &mut impl Iterator<Item = &'a str>,
+    prefix: impl AsRef<str>,
+) -> R {
+    lines
+        .next()
+        .unwrap()
+        .strip_prefix(prefix.as_ref())
+        .unwrap()
+        .parse()
+        .ok()
+        .unwrap()
+}

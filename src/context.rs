@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, process};
 
 use camino::{Utf8Path as Path, Utf8PathBuf as PathBuf};
 
@@ -23,7 +23,7 @@ impl Context {
         Ok(Self {
             exe: PathBuf::from(exe),
             test_dir,
-            tmp_dir: tmp_dir.as_ref().to_owned(),
+            tmp_dir: tmp_dir.as_ref().join(process::id().to_string()),
         })
     }
 }

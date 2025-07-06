@@ -1,5 +1,5 @@
 use super::{Lexer, Result};
-use crate::test::{TestCase, token::Token};
+use crate::test::{formats::crambly::token::Token, tc::TestCase};
 
 pub(crate) fn parse(lexer: &mut Lexer<'_>) -> Result<TestCase> {
     parse_inner(lexer, ())

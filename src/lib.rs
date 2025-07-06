@@ -22,15 +22,21 @@ use std::{fs, process::Command};
 
 use anyhow::anyhow;
 use camino::Utf8Path as Path;
+#[cfg(test)]
+use pretty_assertions as _;
 
 use self::context::Context;
 
 mod context;
 mod test;
+mod utils;
 mod walk;
 
 pub use anyhow::Result;
-use test::Test;
+use test::{
+    Test,
+    formats::{Cram, Crambly},
+};
 
 /// Run cram tests
 #[macro_export]
@@ -65,15 +71,14 @@ pub fn cram_internal(
         if path.extension() != Some("test") {
             return Ok(());
         }
-        let stripped_path = path.strip_prefix(&test_dir)?;
-        let test = Test::read(stripped_path, fs::read_to_string(path)?)?;
-        let mut dest = tmp_dir.join(stripped_path);
+        let test = Test::read::<Crambly>(path)?;
+        let mut dest = tmp_dir.join(path.strip_prefix(&test_dir)?);
         let _ = dest.set_extension("t");
         fs::create_dir_all(
             dest.parent()
                 .ok_or_else(|| anyhow!("Malformed test directory"))?,
         )?;
-        fs::write(dest, test.render())?;
+        fs::write(dest, test.render::<Cram>()?)?;
         Ok(())
     })?;
 
@@ -87,9 +92,8 @@ pub fn cram_internal(
         if path.extension() != Some("err") {
             return Ok(());
         }
-        let test = Test::read_cram(fs::read_to_string(path)?);
-        let original = fs::read_to_string(test_dir.join(test.path()))?;
-        fs::write(test_dir.join(test.err_path()), test.render_err(&original))?;
+        let test = Test::read::<Cram>(path)?;
+        fs::write(test.err_path(), test.render::<Crambly>()?)?;
         Ok(())
     })?;
 
@@ -102,68 +106,4 @@ pub fn cram_internal(
     // unsafe {
     //     env::set_var("EXE", exe);
     // }
-    // let cram_status = Command::new("cram").arg(tmp).status()?;
-
-    // walk(tmp, |path| {
-    //     match path.extension().and_then(OsStr::to_str) {
-    //         Some("err") => (),
-    //         _ => return Ok(()),
-    //     }
-    //     let dest = test_dir.join(path.with_extension("").strip_prefix(tmp)?);
-    //     if let Some("cram") =
-    //         dest.with_extension("").extension().and_then(OsStr::to_str)
-    //     {
-    //         untranslate(path, dest.with_extension("err"))?;
-    //     } else {
-    //         let mut dest = dest.into_os_string();
-    //         dest.push(".err");
-    //         let _ = fs::copy(path, dest)?;
-    //     }
-    //     Ok(())
-    // })?;
-
-    // fs::remove_dir_all(tmp)?;
-    // assert!(cram_status.success());
-    // Ok(())
 }
-
-// fn translate(src: &Path, dest: PathBuf) -> Result {
-//     let result = fs::read_to_string(src)?
-//         .lines()
-//         .map(|line| {
-//             if line.starts_with('#') {
-//                 format!("{line}\n")
-//             } else {
-//                 format!("  {line}\n")
-//             }
-//         })
-//         .collect::<String>();
-
-//     let mut dest = dest.into_os_string();
-//     dest.push(".t");
-//     fs::write(dest, result)?;
-
-//     Ok(())
-// }
-
-// fn untranslate(src: &Path, dest: PathBuf) -> Result {
-//     let result = fs::read_to_string(src)?
-//         .lines()
-//         .map(|line| {
-//             if line.starts_with("  ") {
-//                 line.chars()
-//                     .skip(2)
-//                     .chain(iter::once('\n'))
-//                     .collect::<String>()
-//             } else if !line.starts_with('#') {
-//                 format!("# {line}\n")
-//             } else {
-//                 format!("{line}\n")
-//             }
-//         })
-//         .collect::<String>();
-
-//     fs::write(dest, result)?;
-
-//     Ok(())
-// }
