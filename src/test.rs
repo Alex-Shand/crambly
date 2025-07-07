@@ -6,9 +6,10 @@ use self::tc::TestCase;
 
 mod command;
 pub(crate) mod formats;
+mod output;
 mod tc;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub(crate) struct Test {
     path: PathBuf,
     cases: Vec<TestCase>,

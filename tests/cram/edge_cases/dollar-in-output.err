@@ -1,3 +1,0 @@
-$ printf 'A\n$ B\n'
-A
-$ B

@@ -33,25 +33,19 @@ impl fmt::Display for CaseRenderer<'_> {
         for line in &self.0.command.rest_lines {
             writeln!(f, "{}{}", magic::COMMAND_CONT_PREFIX, line)?;
         }
-        for line in self.0.output.lines() {
+        for line in self.0.output.text.lines() {
             writeln!(f, "{}", OutputRenderer(line))?;
         }
         for _ in 0..20 {
             writeln!(f)?;
         }
         writeln!(f, "{}", magic::METADATA_HEADER)?;
-        writeln!(
-            f,
-            "{}{}",
-            magic::METADATA_OUTPUT_START_PREFIX,
-            self.0.output_start_line
-        )?;
-        writeln!(
-            f,
-            "{}{}",
-            magic::METADATA_OUTPUT_END_PREFIX,
-            self.0.output_end_line
-        )?;
+        if let Some(line) = self.0.output.start_line {
+            writeln!(f, "{}{line}", magic::METADATA_OUTPUT_START_PREFIX)?;
+        }
+        if let Some(line) = self.0.output.end_line {
+            writeln!(f, "{}{line}", magic::METADATA_OUTPUT_END_PREFIX)?;
+        }
         writeln!(f, "{}{}", magic::END_TEST_CASE, self.0.name)?;
         Ok(())
     }

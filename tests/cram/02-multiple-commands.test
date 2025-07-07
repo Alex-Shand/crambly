@@ -1,0 +1,28 @@
+# One crambly file can have multiple commands
+# In this case the command output must be delimited by @@@@@@
+# Output binds to the nearest preceeding command by default
+
+$ echo "Hello"
+
+@@@@@@
+Hello
+@@@@@@
+
+$ echo "Goodbye"
+
+@@@@@@
+Goodbye
+@@@@@@
+
+# If a command has no output following it crambly will assert that the command
+# produces no output
+# Commands run in order in the same shell session so one command can export
+# variables used by another
+
+$ export MY_VAR='Export!'
+# This is not a continuation, it's a separate command
+$ echo "$MY_VAR"
+
+# The output of the last command in the file doesn't need to be delimited
+
+Export!

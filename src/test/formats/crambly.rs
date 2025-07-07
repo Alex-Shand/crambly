@@ -25,13 +25,16 @@ pub(crate) fn render(test: &Test) -> Result<String> {
 }
 
 fn render_case(case: &TestCase, mut err: Vec<String>) -> Vec<String> {
-    if case.output_start_line == err.len() {
-        err.extend(case.output.lines().map(ToOwned::to_owned));
-    } else {
-        drop(err.splice(
-            case.output_start_line..=case.output_end_line,
-            case.output.lines().map(ToOwned::to_owned),
-        ));
+    let iter = case.output.text.lines().map(ToOwned::to_owned);
+    match (case.output.start_line, case.output.end_line) {
+        (Some(start), Some(end)) => {
+            if start >= err.len() {
+                err.extend(iter);
+            } else {
+                drop(err.splice(start..=end, iter));
+            }
+        }
+        _ => err.extend(iter),
     }
     err
 }

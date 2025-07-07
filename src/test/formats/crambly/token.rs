@@ -6,7 +6,9 @@ pub(crate) enum Token {
     CommandCont(String),
 
     #[pratt(payload = it.clone())]
-    ImplicitOutput(String),
+    Output(String),
+    #[pratt(payload = format!("@@@@@@\n{it}\n@@@@@@"))]
+    DelimitedOutput(String),
 }
 
 pub(crate) type TokenAndSpan = pratt::TokenAndSpan<Token>;

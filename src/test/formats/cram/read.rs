@@ -5,7 +5,7 @@ use camino::Utf8Path as Path;
 
 use super::magic;
 use crate::{
-    test::{Test, command::Command, tc::TestCase},
+    test::{Test, command::Command, output::Output, tc::TestCase},
     utils,
 };
 
@@ -33,15 +33,18 @@ fn read_case<'a>(
         .collect::<Vec<_>>()
         .join("\n");
     let output_start_line =
-        next_prefix(lines, magic::METADATA_OUTPUT_START_PREFIX);
-    let output_end_line = next_prefix(lines, magic::METADATA_OUTPUT_END_PREFIX);
+        next_if_prefix(lines, magic::METADATA_OUTPUT_START_PREFIX);
+    let output_end_line =
+        next_if_prefix(lines, magic::METADATA_OUTPUT_END_PREFIX);
     next_eq(lines, format!("{}{name}", magic::END_TEST_CASE));
     TestCase {
         name,
         command,
-        output,
-        output_start_line,
-        output_end_line,
+        output: Output {
+            text: output,
+            start_line: output_start_line,
+            end_line: output_end_line,
+        },
     }
 }
 
@@ -69,16 +72,18 @@ fn next_eq<'a>(
     assert_eq!(lines.next(), Some(expected.as_ref()));
 }
 
+fn next_if_prefix<'a, R: FromStr>(
+    lines: &mut Peekable<impl Iterator<Item = &'a str>>,
+    prefix: impl AsRef<str>,
+) -> Option<R> {
+    let str = lines.peek()?.strip_prefix(prefix.as_ref())?;
+    let _ = lines.next();
+    Some(str.parse().ok().unwrap())
+}
+
 fn next_prefix<'a, R: FromStr>(
-    lines: &mut impl Iterator<Item = &'a str>,
+    lines: &mut Peekable<impl Iterator<Item = &'a str>>,
     prefix: impl AsRef<str>,
 ) -> R {
-    lines
-        .next()
-        .unwrap()
-        .strip_prefix(prefix.as_ref())
-        .unwrap()
-        .parse()
-        .ok()
-        .unwrap()
+    next_if_prefix(lines, prefix).unwrap()
 }

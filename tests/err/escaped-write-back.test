@@ -1,0 +1,4 @@
+$ printf 'A\n$B\n'
+#   No space ☝️
+A
+$ B
