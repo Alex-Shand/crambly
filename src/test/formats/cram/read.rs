@@ -1,11 +1,11 @@
-use std::str::FromStr;
+use std::{iter::Peekable, str::FromStr};
 
 use anyhow::Result;
 use camino::Utf8Path as Path;
 
 use super::magic;
 use crate::{
-    test::{Test, tc::TestCase},
+    test::{Test, command::Command, tc::TestCase},
     utils,
 };
 
@@ -22,9 +22,11 @@ pub(crate) fn read(path: &Path) -> Result<Test> {
     Ok(Test { path, cases })
 }
 
-fn read_case<'a>(lines: &mut impl Iterator<Item = &'a str>) -> TestCase {
+fn read_case<'a>(
+    lines: &mut Peekable<impl Iterator<Item = &'a str>>,
+) -> TestCase {
     let name = next_prefix(lines, magic::NAME_PREFIX);
-    let command = next_prefix(lines, magic::COMMAND_PREFIX);
+    let command = read_command(lines);
     let output = lines
         .take_while(|&l| l != magic::METADATA_HEADER)
         .map(|l| l.strip_prefix(magic::OUTPUT_PREFIX).unwrap())
@@ -40,6 +42,23 @@ fn read_case<'a>(lines: &mut impl Iterator<Item = &'a str>) -> TestCase {
         output,
         output_start_line,
         output_end_line,
+    }
+}
+
+fn read_command<'a>(
+    lines: &mut Peekable<impl Iterator<Item = &'a str>>,
+) -> Command {
+    let first_line = next_prefix(lines, magic::COMMAND_PREFIX);
+    let mut rest_lines = Vec::new();
+    while let Some(line) = lines.peek() {
+        if !line.starts_with(magic::COMMAND_CONT_PREFIX) {
+            break;
+        }
+        rest_lines.push(next_prefix(lines, magic::COMMAND_CONT_PREFIX));
+    }
+    Command {
+        first_line,
+        rest_lines,
     }
 }
 

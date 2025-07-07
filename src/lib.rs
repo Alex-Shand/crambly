@@ -18,7 +18,7 @@
 #![allow(clippy::missing_panics_doc)]
 #![allow(clippy::missing_errors_doc)]
 
-use std::{fs, process::Command};
+use std::{env, fs, process::Command};
 
 use anyhow::anyhow;
 use camino::Utf8Path as Path;
@@ -55,6 +55,7 @@ macro_rules! cram {
 }
 
 #[doc(hidden)]
+#[expect(unsafe_code)]
 pub fn cram_internal(
     exe: &str,
     test_dir: impl AsRef<Path>,
@@ -82,6 +83,10 @@ pub fn cram_internal(
         Ok(())
     })?;
 
+    // SAFETY: This is just a test
+    unsafe {
+        env::set_var("EXE", exe);
+    }
     let cram_status = if no_output {
         Command::new("cram").arg(&tmp_dir).output()?.status
     } else {
@@ -101,9 +106,4 @@ pub fn cram_internal(
     assert!(cram_status.success());
 
     Ok(())
-
-    // // SAFETY: This is just a test
-    // unsafe {
-    //     env::set_var("EXE", exe);
-    // }
 }

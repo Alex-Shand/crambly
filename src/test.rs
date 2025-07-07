@@ -4,10 +4,11 @@ use formats::{Read, Render};
 
 use self::tc::TestCase;
 
+mod command;
 pub(crate) mod formats;
 mod tc;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub(crate) struct Test {
     path: PathBuf,
     cases: Vec<TestCase>,
@@ -20,10 +21,6 @@ impl Test {
 
     pub(crate) fn render<Format: Render>(&self) -> Result<String> {
         Format::render(self)
-    }
-
-    pub(crate) fn path(&self) -> &Path {
-        &self.path
     }
 
     pub(crate) fn err_path(&self) -> PathBuf {

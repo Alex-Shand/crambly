@@ -1,0 +1,12 @@
+# If a command needs to span multiple lines, continuation lines must start with
+# >
+$ for i in $(seq 1 10); do
+>     echo "$i"
+> done
+
+# Evens only!
+2
+4
+6
+8
+10

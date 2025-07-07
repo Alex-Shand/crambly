@@ -22,6 +22,11 @@ fn err() -> crambly::Result<()> {
         HashMap::new();
     for entry in fs::read_dir(dir)? {
         let path = &PathBuf::try_from(entry?.path())?;
+        if path.extension() == Some("test") {
+            let _ = tests
+                .entry(path.file_stem().expect("Bad test file path").to_owned())
+                .or_default();
+        }
         if path.extension() == Some("err") {
             let contents = fs::read_to_string(path)?;
             let (err, _) = tests
@@ -54,13 +59,13 @@ fn err() -> crambly::Result<()> {
     for (test, (err, expected)) in tests {
         match (err, expected) {
             (Some(err), Some(expected)) => {
-                fs::remove_file(dir.join(format!("{test}.err")))?;
                 assert_eq!(expected, err, "Error in test case {test}");
+                fs::remove_file(dir.join(format!("{test}.err")))?;
             }
-            (None, Some(_)) => {
+            (None, _) => {
                 panic!("Test case {test} didn't generate a .err file")
             }
-            (_, None) => (),
+            (Some(_), None) => (),
         }
     }
 
@@ -70,8 +75,12 @@ fn err() -> crambly::Result<()> {
 fn nopanic(
     f: impl FnOnce() -> crambly::Result<()> + UnwindSafe,
 ) -> crambly::Result<()> {
-    match panic::catch_unwind(f) {
+    let hook = panic::take_hook();
+    panic::set_hook(Box::new(|_| {}));
+    let result = match panic::catch_unwind(f) {
         Ok(r) => r,
         Err(_) => Ok(()),
-    }
+    };
+    panic::set_hook(hook);
+    result
 }

@@ -1,4 +1,4 @@
-use super::{Lexer, Result};
+use super::{Lexer, Result, command};
 use crate::test::{formats::crambly::token::Token, tc::TestCase};
 
 pub(crate) fn parse(lexer: &mut Lexer<'_>) -> Result<TestCase> {
@@ -7,7 +7,7 @@ pub(crate) fn parse(lexer: &mut Lexer<'_>) -> Result<TestCase> {
 
 #[pratt::free]
 fn parse_inner(lexer: &mut Lexer<'_>, (): ()) -> Result<TestCase> {
-    let command = require!(Token::Command(command) => command.clone(), "Expect command to start test case");
+    let command = command::parse(lexer)?;
     let output = require!(Token::ImplicitOutput(output) => output.clone(), "Expect output following command");
     let output_span = current_span!();
     Ok(TestCase {

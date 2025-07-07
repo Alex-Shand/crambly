@@ -2,6 +2,8 @@
 pub(crate) enum Token {
     #[pratt(payload = format!("$ {it}"))]
     Command(String),
+    #[pratt(payload = format!("> {it}"))]
+    CommandCont(String),
 
     #[pratt(payload = it.clone())]
     ImplicitOutput(String),

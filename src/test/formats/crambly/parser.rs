@@ -4,6 +4,7 @@ use pratt::lexer::LexError;
 use super::{Test, token::TokenAndSpan};
 
 mod case;
+mod command;
 
 type Lexer<'a> = pratt::LexerHandle<'a, TokenAndSpan, ()>;
 type Table<Ast> = pratt::Table<TokenAndSpan, (), Ast>;
