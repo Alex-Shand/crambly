@@ -13,5 +13,6 @@ fn parse_inner(lexer: &mut Lexer<'_>, (): ()) -> Result<TestCase> {
         name: String::new(),
         command,
         output,
+        last: false,
     })
 }

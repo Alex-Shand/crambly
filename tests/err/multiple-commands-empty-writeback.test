@@ -1,0 +1,19 @@
+# All existing output in this file is right
+# The problem is the third command is incorrectly expected to produce no output
+
+$ echo "Hello"
+
+@@@@@@
+Hello
+@@@@@@
+
+$ echo "Goodbye"
+
+@@@@@@
+Goodbye!
+@@@@@@
+
+$ echo "AHHHH!"
+$ echo "🤔"
+
+\xf0\x9f\xa4\x94 (esc)

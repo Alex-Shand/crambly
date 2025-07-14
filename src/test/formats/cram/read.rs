@@ -26,16 +26,19 @@ fn read_case<'a>(
     lines: &mut Peekable<impl Iterator<Item = &'a str>>,
 ) -> TestCase {
     let name = next_prefix(lines, magic::NAME_PREFIX);
-    let command = read_command(lines);
+    let mut command = read_command(lines);
     let output = lines
         .take_while(|&l| l != magic::METADATA_HEADER)
         .map(|l| l.strip_prefix(magic::OUTPUT_PREFIX).unwrap())
         .collect::<Vec<_>>()
         .join("\n");
+    command.end_line =
+        next_prefix(lines, magic::METADATA_COMMAND_END_LINE_PREFIX);
     let output_start_line =
         next_if_prefix(lines, magic::METADATA_OUTPUT_START_PREFIX);
     let output_end_line =
         next_if_prefix(lines, magic::METADATA_OUTPUT_END_PREFIX);
+    let last = next_prefix(lines, magic::METADATA_LAST_PREFIX);
     next_eq(lines, format!("{}{name}", magic::END_TEST_CASE));
     TestCase {
         name,
@@ -45,6 +48,7 @@ fn read_case<'a>(
             start_line: output_start_line,
             end_line: output_end_line,
         },
+        last,
     }
 }
 
@@ -62,6 +66,7 @@ fn read_command<'a>(
     Command {
         first_line,
         rest_lines,
+        end_line: 0,
     }
 }
 

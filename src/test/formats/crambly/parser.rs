@@ -17,6 +17,10 @@ pub(crate) fn parse(lexer: &mut Lexer<'_>, path: &Path) -> Result<Test> {
         cases.push(case::parse(lexer)?);
     }
 
+    if let Some(last) = cases.last_mut() {
+        last.last = true;
+    }
+
     Ok(Test {
         path: path.to_owned(),
         cases,

@@ -1,0 +1,19 @@
+$ echo "Hello"
+
+# This is wrong
+@@@@@@
+Hello
+@@@@@@
+
+$ echo "Goodbye"
+
+# So is this
+@@@@@@
+Goodbye
+@@@@@@
+
+$ export MY_VAR='Export!'
+$ echo "$MY_VAR"
+
+# And this
+Export!

@@ -25,6 +25,8 @@ fn parse_inner(lexer: &mut Lexer<'_>, (): ()) -> Result<Output> {
     } else {
         (String::new(), None, None)
     };
+    let start_line = start_line.map(|x| x as isize);
+    let end_line = end_line.map(|x| x as isize);
     Ok(Output {
         text,
         start_line,
