@@ -5,6 +5,9 @@ pub(crate) enum Token {
     #[pratt(payload = format!("> {it}"))]
     CommandCont(String),
 
+    #[pratt(payload = format!("%%%%%%\n{it}\n%%%%%%"))]
+    Input(String),
+
     #[pratt(payload = it.clone())]
     Output(String),
     #[pratt(payload = format!("@@@@@@\n{it}\n@@@@@@"))]

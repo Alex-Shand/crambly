@@ -1,5 +1,7 @@
+use std::collections::HashMap;
+
 use anyhow::Result;
-use camino::Utf8Path as Path;
+use camino::{Utf8Path as Path, Utf8PathBuf as PathBuf};
 
 use super::Test;
 
@@ -11,7 +13,8 @@ pub(crate) trait Read {
 }
 
 pub(crate) trait Render {
-    fn render(test: &Test) -> Result<String>;
+    type Aux;
+    fn render(test: &Test, aux: Self::Aux) -> Result<String>;
 }
 
 pub(crate) struct Crambly;
@@ -30,13 +33,15 @@ impl Read for Cram {
 }
 
 impl Render for Crambly {
-    fn render(test: &Test) -> Result<String> {
+    type Aux = ();
+    fn render(test: &Test, (): ()) -> Result<String> {
         crambly::render(test)
     }
 }
 
 impl Render for Cram {
-    fn render(test: &Test) -> Result<String> {
-        Ok(cram::render(test))
+    type Aux = HashMap<String, (String, PathBuf)>;
+    fn render(test: &Test, aux: Self::Aux) -> Result<String> {
+        Ok(cram::render(test, &aux))
     }
 }

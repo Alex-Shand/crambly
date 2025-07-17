@@ -15,11 +15,16 @@ pub(crate) fn read(path: &Path) -> Result<Test> {
     let lines = &mut lines;
     next_eq(lines, magic::HEADER);
     let path = next_prefix(lines, magic::PATH_PREFIX);
+    let _ = lines.take_while(|&l| l != magic::INPUT_END).count();
     let mut cases = Vec::new();
     while lines.peek().is_some() {
         cases.push(read_case(lines));
     }
-    Ok(Test { path, cases })
+    Ok(Test {
+        path,
+        cases,
+        inputs: Vec::new(),
+    })
 }
 
 fn read_case<'a>(

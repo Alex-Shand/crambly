@@ -84,31 +84,3 @@ fn render_case(
     };
     (err, offset)
 }
-
-// (Some(start), Some(end)) => {
-//     if start >= err.len() {
-//         err.extend(iter);
-//     } else {
-//         drop(err.splice(start..=end, iter));
-//     }
-// }
-// // No output expected but the command produced some
-// _ if !case.output.text.is_empty() => {
-//     if case.last {
-//         // If it's the last command in the file we can just append the
-//         // new output to the end of the file
-//         err.extend(iter);
-//     } else {
-//         // If it isn't the last command we want to place the output
-//         // right after the command, bracketed by `@@@@@@`
-//         drop(
-//             err.splice(
-//                 case.command.end_line..case.command.end_line,
-//                 iter::once(String::from("@@@@@@"))
-//                     .chain(iter)
-//                     .chain(iter::once(String::from("@@@@@@"))),
-//             ),
-//         );
-//     }
-// }
-// _ => (),

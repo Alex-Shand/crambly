@@ -1,0 +1,21 @@
+# Command input can be specified inline using %%%%%% markers
+%%%%%%
+This is command input
+It can be multi-line
+%%%%%%
+
+# The input is available to commands as a string in the $INPUT variable
+$ echo "$INPUT"
+
+@@@@@@
+This is command input
+It can be multi-line
+@@@@@@
+
+# The input is also available as a file on disk, the path is stored in
+# $INPUT_FILE
+
+$ cat $INPUT_FILE
+
+This is command input
+It can be multi-line (no-eol)

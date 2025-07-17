@@ -1,18 +1,32 @@
-use std::fmt;
+use std::{collections::HashMap, fmt};
+
+use camino::Utf8PathBuf as PathBuf;
 
 use super::magic;
 use crate::test::{Test, tc::TestCase};
 
-pub(crate) fn render(test: &Test) -> String {
-    TestRenderer(test).to_string()
+pub(crate) fn render(
+    test: &Test,
+    vars: &HashMap<String, (String, PathBuf)>,
+) -> String {
+    TestRenderer(test, vars).to_string()
 }
 
-struct TestRenderer<'a>(&'a Test);
+struct TestRenderer<'a>(&'a Test, &'a HashMap<String, (String, PathBuf)>);
 
 impl fmt::Display for TestRenderer<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "{}", magic::HEADER)?;
         writeln!(f, "{}{}", magic::PATH_PREFIX, self.0.path)?;
+        for (data_var, (file_var, path)) in self.1 {
+            writeln!(f, "{}export {file_var}={path}", magic::COMMAND_PREFIX)?;
+            writeln!(
+                f,
+                "{}export {data_var}=$(cat ${file_var})",
+                magic::COMMAND_PREFIX
+            )?;
+        }
+        writeln!(f, "{}", magic::INPUT_END)?;
         for case in &self.0.cases {
             writeln!(f, "{}", CaseRenderer(case))?;
         }

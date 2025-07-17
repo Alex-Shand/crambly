@@ -1,0 +1,6 @@
+# The executable under test is available to all commands as the $EXE environment
+# variable
+
+$ $EXE
+
+This is a test

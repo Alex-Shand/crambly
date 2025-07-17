@@ -18,7 +18,7 @@
 #![allow(clippy::missing_panics_doc)]
 #![allow(clippy::missing_errors_doc)]
 
-use std::{env, fs, process::Command};
+use std::{collections::HashMap, env, fs, process::Command};
 
 use anyhow::anyhow;
 use camino::Utf8Path as Path;
@@ -73,13 +73,29 @@ pub fn cram_internal(
             return Ok(());
         }
         let test = Test::read::<Crambly>(path)?;
-        let mut dest = tmp_dir.join(path.strip_prefix(&test_dir)?);
+        let uniq = path.strip_prefix(&test_dir)?;
+
+        let input_base = tmp_dir.join("inputs");
+        let mut vars = HashMap::new();
+        for (data_var, file_var, path, contents) in
+            test.inputs(&input_base, uniq)
+        {
+            fs::create_dir_all(
+                path.parent()
+                    .ok_or_else(|| anyhow!("Malformed input directory"))?,
+            )?;
+            fs::write(&path, contents)?;
+            let old = vars.insert(data_var, (file_var, path));
+            debug_assert!(old.is_none());
+        }
+
+        let mut dest = tmp_dir.join("tests").join(uniq);
         let _ = dest.set_extension("t");
         fs::create_dir_all(
             dest.parent()
                 .ok_or_else(|| anyhow!("Malformed test directory"))?,
         )?;
-        fs::write(dest, test.render::<Cram>()?)?;
+        fs::write(dest, test.render::<Cram>(vars)?)?;
         Ok(())
     })?;
 
@@ -98,7 +114,7 @@ pub fn cram_internal(
             return Ok(());
         }
         let test = Test::read::<Cram>(path)?;
-        fs::write(test.err_path(), test.render::<Crambly>()?)?;
+        fs::write(test.err_path(), test.render::<Crambly>(())?)?;
         Ok(())
     })?;
 
