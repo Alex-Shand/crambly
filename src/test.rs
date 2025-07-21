@@ -40,26 +40,17 @@ impl Test {
         &self,
         base: &Path,
         uniq: &Path,
-    ) -> impl Iterator<Item = (String, String, PathBuf, String)> {
+    ) -> impl Iterator<Item = (String, PathBuf, String)> {
         let base = base.join(uniq);
         self.inputs
             .iter()
             .map(|input| {
-                let (data_var, file_var, path) = if let Some(name) = &input.name
-                {
-                    (
-                        format!("{name}_DATA"),
-                        format!("{name}_FILE"),
-                        base.join("named").join(name),
-                    )
+                let (var, path) = if let Some(name) = &input.name {
+                    (name.clone(), base.join(name))
                 } else {
-                    (
-                        String::from("INPUT"),
-                        String::from("INPUT_FILE"),
-                        base.join("defaut"),
-                    )
+                    (String::from("INPUT"), base.join("input"))
                 };
-                (data_var, file_var, path, input.contents.clone())
+                (var, path, input.contents.clone())
             })
             .collect::<Vec<_>>()
             .into_iter()

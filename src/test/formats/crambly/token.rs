@@ -7,6 +7,8 @@ pub(crate) enum Token {
 
     #[pratt(payload = format!("%%%%%%\n{it}\n%%%%%%"))]
     Input(String),
+    #[pratt(payload = format!("%%% {} %%%\n{}\n%%%%%%", it.0, it.1))]
+    NamedInput(String, String),
 
     #[pratt(payload = it.clone())]
     Output(String),
@@ -15,4 +17,3 @@ pub(crate) enum Token {
 }
 
 pub(crate) type TokenAndSpan = pratt::TokenAndSpan<Token>;
-pub(crate) type TokenType = <Token as pratt::Token>::Type;

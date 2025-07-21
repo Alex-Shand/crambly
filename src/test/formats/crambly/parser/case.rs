@@ -1,6 +1,7 @@
 use super::{Lexer, Result, command, input, output};
 use crate::test::{input::Input, tc::TestCase};
 
+#[expect(clippy::result_large_err)]
 pub(crate) fn parse(lexer: &mut Lexer<'_>) -> Result<(TestCase, Vec<Input>)> {
     parse_inner(lexer, ())
 }

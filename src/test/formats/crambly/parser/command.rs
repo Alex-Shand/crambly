@@ -1,6 +1,7 @@
 use super::{Lexer, Result};
 use crate::test::{command::Command, formats::crambly::token::Token};
 
+#[expect(clippy::result_large_err)]
 pub(crate) fn parse(lexer: &mut Lexer<'_>) -> Result<Command> {
     parse_inner(lexer, ())
 }

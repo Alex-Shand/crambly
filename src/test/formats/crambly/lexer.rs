@@ -14,6 +14,7 @@ pub(crate) fn lexer(
         .build(str)
 }
 
+#[expect(clippy::too_many_lines)]
 fn generate_token(chars: &mut Chars, (): ()) -> Result<Option<TokenAndSpan>> {
     while let Some(c) = chars.skip_whitespace() {
         let start = chars.start_token();
@@ -134,6 +135,45 @@ fn generate_token(chars: &mut Chars, (): ()) -> Result<Option<TokenAndSpan>> {
                 }
 
                 send!(Token::Input(output));
+            }
+            "%%%" [|c| c != '%'] => {
+                let _ = chars.skip_whitespace();
+                let name = chars.peek_while(|c| c == '_' || c.is_alphanumeric()).collect::<String>();
+                let _ = chars.skip_whitespace();
+                let str = chars.take(4).collect::<String>();
+                if str != "%%%\n" {
+                    return Err(LexError::custom("Expected `%%%` following input name"));
+                }
+                let mut have_end = false;
+                let mut output = String::new();
+                while let Some(c) = chars.peek() {
+                    if c == '\n' {
+                        // Might be an end marker, check
+                        let mut checkpoint = chars.checkpoint();
+                        let str = (&mut checkpoint).take(7).collect::<String>();
+                        if str == "\n%%%%%%" {
+                            // Is an end marker
+                            checkpoint.commit();
+                            have_end = true;
+                            break;
+                        }
+                        // Not an end marker
+                        checkpoint.abort();
+                    }
+                    output.push(c);
+                    next!();
+                }
+                // If we got here we either saw an end marker or ran out of
+                // characters. We emit at least the start marker and the output
+                // we gathered.
+
+                // Report an error if we didn't see the end marker
+                if !have_end {
+                    return Err(LexError::unexpected_eof_msg("Expected `%%%%%%` to terminate input"));
+                }
+
+                send!(Token::NamedInput(name, output));
+
             }
         }
 

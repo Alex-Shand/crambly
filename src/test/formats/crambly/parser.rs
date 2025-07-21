@@ -11,9 +11,9 @@ mod input;
 mod output;
 
 type Lexer<'a> = pratt::LexerHandle<'a, TokenAndSpan, ()>;
-type Table<Ast> = pratt::Table<TokenAndSpan, (), Ast>;
 type Result<Ast> = pratt::Result<TokenAndSpan, Ast>;
 
+#[expect(clippy::result_large_err)]
 pub(crate) fn parse(lexer: &mut Lexer<'_>, path: &Path) -> Result<Test> {
     let mut cases = Vec::new();
     let mut inputs = Vec::new();
@@ -44,6 +44,10 @@ pub(crate) fn parse(lexer: &mut Lexer<'_>, path: &Path) -> Result<Test> {
             }
             seen_default_input = true;
         }
+    }
+
+    if seen_default_input && !input_names.is_empty() {
+        return Err(Error::custom("Cannot mix named and unnamed inputs"));
     }
 
     Ok(Test {

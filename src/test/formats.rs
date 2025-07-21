@@ -40,7 +40,7 @@ impl Render for Crambly {
 }
 
 impl Render for Cram {
-    type Aux = HashMap<String, (String, PathBuf)>;
+    type Aux = HashMap<String, PathBuf>;
     fn render(test: &Test, aux: Self::Aux) -> Result<String> {
         Ok(cram::render(test, &aux))
     }

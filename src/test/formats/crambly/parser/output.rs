@@ -1,10 +1,12 @@
 use super::{Lexer, Result};
 use crate::test::{formats::crambly::token::Token, output::Output};
 
+#[expect(clippy::result_large_err)]
 pub(crate) fn parse(lexer: &mut Lexer<'_>) -> Result<Output> {
     parse_inner(lexer, ())
 }
 
+#[expect(clippy::cast_possible_wrap)]
 #[pratt::free]
 fn parse_inner(lexer: &mut Lexer<'_>, (): ()) -> Result<Output> {
     let (text, start_line, end_line) = if check!(Token::Output(_)) {

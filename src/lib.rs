@@ -77,15 +77,13 @@ pub fn cram_internal(
 
         let input_base = tmp_dir.join("inputs");
         let mut vars = HashMap::new();
-        for (data_var, file_var, path, contents) in
-            test.inputs(&input_base, uniq)
-        {
+        for (var, path, contents) in test.inputs(&input_base, uniq) {
             fs::create_dir_all(
                 path.parent()
                     .ok_or_else(|| anyhow!("Malformed input directory"))?,
             )?;
             fs::write(&path, contents)?;
-            let old = vars.insert(data_var, (file_var, path));
+            let old = vars.insert(var, path);
             debug_assert!(old.is_none());
         }
 

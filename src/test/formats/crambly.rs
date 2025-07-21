@@ -29,6 +29,8 @@ pub(crate) fn render(test: &Test) -> Result<String> {
     Ok(err.join("\n"))
 }
 
+#[expect(clippy::cast_sign_loss)]
+#[expect(clippy::cast_possible_wrap)]
 fn render_case(
     case: &TestCase,
     mut err: Vec<String>,

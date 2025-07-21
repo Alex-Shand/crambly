@@ -1,0 +1,29 @@
+# If multiple inputs are required the inputs must be named
+%%% FIRST %%%
+This is the first input
+%%%%%%
+
+# Unnamed inputs are available in string form in a varaible with the same name
+# as the input
+$ echo "$FIRST"
+> echo "$SECOND"
+
+# Inputs (named or unnamed) can appear anywhere unambiguous
+%%% SECOND %%%
+This is the second input
+%%%%%%
+
+@@@@@@
+This is the first input
+This is the second input
+@@@@@@
+
+# Named inputs are available as a file path in the variable `$<NAME>_FILE`
+$ cat "$FIRST_FILE"
+> echo ""
+> echo ""
+> cat "$SECOND_FILE"
+
+This is the first input
+
+This is the second input (no-eol)
