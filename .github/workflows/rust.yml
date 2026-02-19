@@ -15,9 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v5
-    - name: Install Cram
-      run: pip install cram
+    - uses: actions/checkout@v6
     - name: Build
       run: cargo build --verbose
     - name: Run tests
