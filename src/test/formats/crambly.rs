@@ -51,6 +51,10 @@ fn render_case(
             // for splice
             let start = (start + offset) as usize;
             let end = (end + offset) as usize;
+            // Also clamp both of them to the length of the err vec to avoid a
+            // panic
+            let start = start.min(err.len() - 1);
+            let end = end.min(err.len() - 1);
             drop(err.splice(start..=end, iter));
             new_line_count - old_line_count
         }

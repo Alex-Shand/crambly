@@ -20,7 +20,7 @@
 
 use std::{collections::HashMap, env, fs, process::Command};
 
-use anyhow::anyhow;
+use anyhow::{Context as _, anyhow};
 use camino::Utf8Path as Path;
 #[cfg(test)]
 use pretty_assertions as _;
@@ -67,6 +67,8 @@ pub fn cram_internal(
         test_dir,
         tmp_dir,
     } = Context::new(exe, test_dir, tmp_dir)?;
+    fs::create_dir_all(&tmp_dir)
+        .with_context(|| anyhow!("Failed to create {tmp_dir}"))?;
 
     walk::walk(&test_dir, |path| {
         if path.extension() != Some("test") {
@@ -116,7 +118,8 @@ pub fn cram_internal(
         Ok(())
     })?;
 
-    fs::remove_dir_all(&tmp_dir)?;
+    fs::remove_dir_all(&tmp_dir)
+        .with_context(|| anyhow!("Failed to delete {tmp_dir}"))?;
     assert!(cram_status.success());
 
     Ok(())
