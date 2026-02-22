@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
+    - name: Install Cram
+      run: pip install cram
     - name: Build
       run: cargo build --verbose
     - name: Run tests
