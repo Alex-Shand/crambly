@@ -111,7 +111,7 @@ dependencies = [
 [[package]]
 name = "pratt"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/pratt.git#29bfce7389615cd67f8b36212294f90324beef82"
+source = "git+https://github.com/Alex-Shand/pratt.git#dbff7156603daaeade945a1d6c92bdf97ed1356b"
 dependencies = [
  "do_while",
  "pratt_derive",
@@ -122,7 +122,7 @@ dependencies = [
 [[package]]
 name = "pratt_derive"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/pratt.git#29bfce7389615cd67f8b36212294f90324beef82"
+source = "git+https://github.com/Alex-Shand/pratt.git#dbff7156603daaeade945a1d6c92bdf97ed1356b"
 dependencies = [
  "proc",
 ]
@@ -140,7 +140,7 @@ dependencies = [
 [[package]]
 name = "proc"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#a0237ccc358445d147fe69f9e7a1adbe563c1d57"
+source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
 dependencies = [
  "proc_attribute",
  "proc_common",
@@ -170,7 +170,7 @@ dependencies = [
 [[package]]
 name = "proc_attribute"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#a0237ccc358445d147fe69f9e7a1adbe563c1d57"
+source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
 dependencies = [
  "proc_common",
 ]
@@ -178,7 +178,7 @@ dependencies = [
 [[package]]
 name = "proc_common"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#a0237ccc358445d147fe69f9e7a1adbe563c1d57"
+source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -190,7 +190,7 @@ dependencies = [
 [[package]]
 name = "proc_derive"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#a0237ccc358445d147fe69f9e7a1adbe563c1d57"
+source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
 dependencies = [
  "convert_case",
  "proc_attribute",
@@ -200,7 +200,7 @@ dependencies = [
 [[package]]
 name = "proc_function"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#a0237ccc358445d147fe69f9e7a1adbe563c1d57"
+source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
 dependencies = [
  "proc_attribute",
  "proc_common",
@@ -209,7 +209,7 @@ dependencies = [
 [[package]]
 name = "proc_parse"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#a0237ccc358445d147fe69f9e7a1adbe563c1d57"
+source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
 dependencies = [
  "proc_common",
  "proc_derive",
@@ -268,7 +268,7 @@ dependencies = [
 [[package]]
 name = "span"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/span.git#0530e9c7f4344483608895d5e0e101bdcd8807ae"
+source = "git+https://github.com/Alex-Shand/span.git#4250bba20a71a596daab66e6f37ce911850bbbf3"
 dependencies = [
  "itertools",
  "owned_chars",
@@ -363,7 +363,7 @@ checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
 [[package]]
 name = "value-type"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/value-type.git#fdcff434d91f1ba45efac48cf2aaf061f6982217"
+source = "git+https://github.com/Alex-Shand/value-type.git#7a8addf66da3e73d6de28755cbe983f10ad24a42"
 dependencies = [
  "proc",
 ]
