@@ -111,7 +111,7 @@ dependencies = [
 [[package]]
 name = "pratt"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/pratt.git#dbff7156603daaeade945a1d6c92bdf97ed1356b"
+source = "git+https://github.com/Alex-Shand/pratt.git#88d92617705d1359b100710bd9e25cf63bf90df7"
 dependencies = [
  "do_while",
  "pratt_derive",
@@ -122,7 +122,7 @@ dependencies = [
 [[package]]
 name = "pratt_derive"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/pratt.git#dbff7156603daaeade945a1d6c92bdf97ed1356b"
+source = "git+https://github.com/Alex-Shand/pratt.git#88d92617705d1359b100710bd9e25cf63bf90df7"
 dependencies = [
  "proc",
 ]
@@ -140,7 +140,7 @@ dependencies = [
 [[package]]
 name = "proc"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
+source = "git+https://github.com/Alex-Shand/proc.git#f1472fc5863857dca6cc991c5f25d34152b7177a"
 dependencies = [
  "proc_attribute",
  "proc_common",
@@ -170,7 +170,7 @@ dependencies = [
 [[package]]
 name = "proc_attribute"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
+source = "git+https://github.com/Alex-Shand/proc.git#f1472fc5863857dca6cc991c5f25d34152b7177a"
 dependencies = [
  "proc_common",
 ]
@@ -178,19 +178,19 @@ dependencies = [
 [[package]]
 name = "proc_common"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
+source = "git+https://github.com/Alex-Shand/proc.git#f1472fc5863857dca6cc991c5f25d34152b7177a"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
  "sealed",
- "syn 2.0.117",
+ "syn 3.0.3",
 ]
 
 [[package]]
 name = "proc_derive"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
+source = "git+https://github.com/Alex-Shand/proc.git#f1472fc5863857dca6cc991c5f25d34152b7177a"
 dependencies = [
  "convert_case",
  "proc_attribute",
@@ -200,7 +200,7 @@ dependencies = [
 [[package]]
 name = "proc_function"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
+source = "git+https://github.com/Alex-Shand/proc.git#f1472fc5863857dca6cc991c5f25d34152b7177a"
 dependencies = [
  "proc_attribute",
  "proc_common",
@@ -209,7 +209,7 @@ dependencies = [
 [[package]]
 name = "proc_parse"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/proc.git#d81402035000ba03b56d6ddd46843228c82cb015"
+source = "git+https://github.com/Alex-Shand/proc.git#f1472fc5863857dca6cc991c5f25d34152b7177a"
 dependencies = [
  "proc_common",
  "proc_derive",
@@ -268,7 +268,7 @@ dependencies = [
 [[package]]
 name = "span"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/span.git#4250bba20a71a596daab66e6f37ce911850bbbf3"
+source = "git+https://github.com/Alex-Shand/span.git#b92433cfd99b6a446dc05e39e2b43197d2cf03fc"
 dependencies = [
  "itertools",
  "owned_chars",
@@ -292,6 +292,17 @@ name = "syn"
 version = "2.0.117"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e665b8803e7b1d2a727f4023456bbbbe74da67099c585258af0ad9c5013b9b99"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
+]
+
+[[package]]
+name = "syn"
+version = "3.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -363,7 +374,7 @@ checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
 [[package]]
 name = "value-type"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/value-type.git#7a8addf66da3e73d6de28755cbe983f10ad24a42"
+source = "git+https://github.com/Alex-Shand/value-type.git#e938f80c85ea4bfd55ad83b7f3a0f866795cf5af"
 dependencies = [
  "proc",
 ]
