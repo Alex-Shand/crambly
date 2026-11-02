@@ -111,7 +111,7 @@ dependencies = [
 [[package]]
 name = "pratt"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/pratt.git#12066265e273a787729086b4a780fd50edd70a9a"
+source = "git+https://github.com/Alex-Shand/pratt.git#642de62792bdd0312096c5b735dd1f3248846fca"
 dependencies = [
  "do_while",
  "pratt_derive",
@@ -122,7 +122,7 @@ dependencies = [
 [[package]]
 name = "pratt_derive"
 version = "0.1.0"
-source = "git+https://github.com/Alex-Shand/pratt.git#12066265e273a787729086b4a780fd50edd70a9a"
+source = "git+https://github.com/Alex-Shand/pratt.git#642de62792bdd0312096c5b735dd1f3248846fca"
 dependencies = [
  "proc",
 ]
