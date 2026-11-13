@@ -70,6 +70,18 @@ fn generate_token(chars: &mut Chars, (): ()) -> Result<Option<TokenAndSpan>> {
             "@@@@@@" [is_newline] => {
                 // Skip over the newline
                 next!();
+
+                // Check if the end marker is right there
+                let mut checkpoint = chars.checkpoint();
+                let str = (&mut checkpoint).take(6).collect::<String>();
+                if str == "@@@@@@" {
+                    // Empty!
+                    checkpoint.commit();
+                    send!(Token::DelimitedOutput(String::new()));
+                }
+                // Not Empty...
+                checkpoint.abort();
+
                 let mut have_end = false;
                 let mut output = String::new();
                 while let Some(c) = chars.peek() {
@@ -106,6 +118,18 @@ fn generate_token(chars: &mut Chars, (): ()) -> Result<Option<TokenAndSpan>> {
             "%%%%%%" [is_newline] => {
                 // Skip over the newline
                 next!();
+
+                // Check if the end marker is right there
+                let mut checkpoint = chars.checkpoint();
+                let str = (&mut checkpoint).take(6).collect::<String>();
+                if str == "%%%%%%" {
+                    // Empty!
+                    checkpoint.commit();
+                    send!(Token::Input(String::new()));
+                }
+                // Not Empty...
+                checkpoint.abort();
+
                 let mut have_end = false;
                 let mut output = String::new();
                 while let Some(c) = chars.peek() {
